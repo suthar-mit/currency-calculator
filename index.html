@@ -1,21 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>UGX Denomination Calculator</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
-      background: linear-gradient(to right, #e3f2fd, #ffffff);
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+      background-size: cover;
       color: #333;
+      min-height: 100vh;
+    }
+
+    /* Overlay to dim the background for better contrast */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      z-index: -1;
     }
 
     h2 {
       text-align: center;
       margin-bottom: 20px;
-      font-size: 24px;
+      font-size: 28px;
+      font-weight: 700;
+      color: #004a99;
+      text-shadow: 1px 1px 3px #a3c4f3;
     }
 
     .container {
@@ -24,53 +38,48 @@
     }
 
     table {
-      border: 1px solid #ccc;
+      border: 1.5px solid #004a99;
       border-collapse: collapse;
       width: 100%;
       max-width: 600px;
       margin: 0 auto 20px auto;
       background-color: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 74, 153, 0.2);
+      border-radius: 6px;
     }
 
     th, td {
-      padding: 12px;
+      padding: 14px 12px;
       text-align: right;
-      border: 1px solid #ccc;
+      border: 1px solid #004a99;
     }
 
     th {
-      background-color: #f5f5f5;
-      font-weight: 600;
+      background-color: #d6e6fb;
+      font-weight: 700;
+      font-size: 16px;
+      color: #003366;
     }
 
     tfoot th {
-      background-color: #e3f2fd;
+      background-color: #a9c7ff;
+      font-size: 17px;
+      font-weight: 800;
+      color: #001f4d;
     }
 
     input[type="number"] {
       width: 70px;
-      padding: 6px;
-      font-size: 14px;
+      padding: 8px;
+      font-size: 15px;
       text-align: right;
+      border: 1.5px solid #004a99;
+      border-radius: 4px;
+      transition: border-color 0.3s ease;
     }
-
-    .btn {
-      display: block;
-      width: 90%;
-      max-width: 300px;
-      margin: 10px auto;
-      padding: 12px;
-      font-size: 16px;
-      color: #fff;
-      background-color: #0078D7;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .btn-danger {
-      background-color: #e53935;
+    input[type="number"]:focus {
+      border-color: #00264d;
+      outline: none;
     }
 
     #remarkInput {
@@ -78,64 +87,127 @@
       width: 100%;
       max-width: 600px;
       margin: 0 auto 15px auto;
-      padding: 10px;
-      font-size: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 1.5px solid #004a99;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 74, 153, 0.2);
+      transition: border-color 0.3s ease;
+    }
+    #remarkInput:focus {
+      border-color: #00264d;
+      outline: none;
     }
 
     #captureArea {
       position: relative;
-      padding-bottom: 140px;
+      padding-bottom: 180px; /* enough space for stamp + remark */
+      max-width: 620px;
+      margin: 0 auto 30px auto;
+      background: #f0f7ff;
+      border: 2px solid #004a99;
+      border-radius: 8px;
+      box-shadow: 0 6px 15px rgba(0, 74, 153, 0.25);
+      padding: 20px;
     }
 
-.stamp {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-  width: auto;
-  min-width: 180px;
-}
+    .stamp {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 140px;
+      height: 140px;
+      border: 3px solid #004a99;
+      border-radius: 6px;
+      background: #c7dafc;
+      box-shadow: inset 0 0 10px #003366, 0 4px 8px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-weight: 700;
+      color: #00264d;
+      font-size: 15px;
+      user-select: none;
+    }
 
-.stamp-date {
-  font-weight: 600;
-  font-size: 13px;
-  margin-bottom: 4px;
-}
+    .stamp-date {
+      margin-bottom: 8px;
+      font-size: 13px;
+      letter-spacing: 1.1px;
+      color: #001f4d;
+    }
 
-#stampTime {
-  font-size: 15px;
-  font-weight: 500;
-}
+    #stampTime {
+      font-size: 18px;
+      color: #001f4d;
+      letter-spacing: 1.5px;
+    }
+
+    #remarkDisplay {
+      max-width: 600px;
+      margin: 10px auto 0 auto;
+      padding: 10px 20px;
+      background: #d6e6fb;
+      border: 2px solid #004a99;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #00264d;
+      box-shadow: 0 3px 8px rgba(0, 74, 153, 0.3);
+      word-wrap: break-word;
+      min-height: 38px;
+      user-select: none;
+    }
+
+    .btn {
+      display: block;
+      width: 90%;
+      max-width: 320px;
+      margin: 10px auto;
+      padding: 14px;
+      font-size: 18px;
+      color: #fff;
+      background-color: #004a99;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 12px rgba(0, 74, 153, 0.5);
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #00264d;
+    }
 
     @media (max-width: 768px) {
-      .stamp {
-        position: static;
-        margin: 20px auto;
-      }
-
       input[type="number"] {
         width: 60px;
+      }
+      #captureArea {
+        padding-bottom: 220px;
+      }
+      .stamp {
+        position: static;
+        margin: 20px auto 0 auto;
+        width: 100px;
+        height: 100px;
+        font-size: 13px;
+      }
+      #remarkDisplay {
+        max-width: 90vw;
+        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
-
   <h2>UGX Denomination Calculator</h2>
 
   <div class="container">
-    <input type="text" id="remarkInput" placeholder="Enter your remark here...">
+    <input type="text" id="remarkInput" placeholder="Enter your remark here..." />
 
     <div id="captureArea">
       <table>
@@ -155,6 +227,8 @@
         </tfoot>
       </table>
 
+      <div id="remarkDisplay"></div>
+
       <div class="stamp">
         <div class="stamp-date" id="stampDate">Date</div>
         <div id="stampTime">Time</div>
@@ -168,7 +242,10 @@
   <script>
     const notes = [50000, 20000, 10000, 5000, 2000, 1000, 500, 200, 100];
     const tbody = document.getElementById("denominations");
+    const remarkInput = document.getElementById("remarkInput");
+    const remarkDisplay = document.getElementById("remarkDisplay");
 
+    // Create table rows
     notes.forEach(note => {
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -201,15 +278,17 @@
     function exportAll() {
       updateStamp();
 
-      const remark = document.getElementById("remarkInput").value.trim();
+      // Show remark text in the display area inside snapshot
+      remarkDisplay.textContent = remarkInput.value.trim() || "(No remark)";
+
       const date = new Date();
-      const serial = Date.now();
       const timestamp = date.toLocaleString();
       const dateFileSafe = date.toISOString().slice(0, 10);
+      const uniqueId = Math.floor(Math.random() * 90000) + 10000; // random 5-digit number
 
+      // Prepare CSV
       const rows = [['Note', 'Quantity', 'Amount']];
       let total = 0;
-
       tbody.querySelectorAll("tr").forEach(row => {
         const input = row.querySelector("input");
         const note = parseInt(input.getAttribute("data-note"));
@@ -220,23 +299,28 @@
           total += amount;
         }
       });
-
       rows.push(['', 'Total', total]);
-      rows.push(['Generated on', timestamp, remark]);
+      rows.push(['Generated on', timestamp, remarkDisplay.textContent]);
 
       const csvContent = rows.map(e => e.join(",")).join("\n");
       const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const csvUrl = URL.createObjectURL(csvBlob);
       const csvLink = document.createElement("a");
       csvLink.href = csvUrl;
-      csvLink.download = `UGX_Report_${dateFileSafe}_${serial}.csv`;
+      csvLink.download = `UGX_Report_${dateFileSafe}.csv`;
       csvLink.click();
 
+      // Snapshot export
       html2canvas(document.getElementById("captureArea")).then(canvas => {
         const imgLink = document.createElement("a");
-        imgLink.download = `UGX_Snapshot_${dateFileSafe}_${serial}.png`;
+        imgLink.download = `UGX_Snapshot_${dateFileSafe}_${uniqueId}.png`;
         imgLink.href = canvas.toDataURL("image/png");
         imgLink.click();
+
+        // Clear remark display after export
+        setTimeout(() => {
+          remarkDisplay.textContent = '';
+        }, 2000);
       });
     }
 
@@ -244,7 +328,7 @@
     calculateTotal();
     updateStamp();
     setInterval(updateStamp, 60000);
-  </script>
 
+  </script>
 </body>
 </html>
