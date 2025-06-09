@@ -110,11 +110,11 @@
 }
 
     .stamp-date {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      font-size: 10px;
-      margin-bottom: 5px;
-    }
+  font-size: 12px;
+  margin-bottom: 4px;
+  writing-mode: horizontal-tb; /* or just remove this line */
+  transform: none;
+}
 
     @media (max-width: 768px) {
       .stamp {
@@ -201,6 +201,7 @@
 
       const remark = document.getElementById("remarkInput").value.trim();
       const date = new Date();
+      const serial = Date.now();
       const timestamp = date.toLocaleString();
       const dateFileSafe = date.toISOString().slice(0, 10);
 
